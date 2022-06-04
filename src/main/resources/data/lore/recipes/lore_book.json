@@ -1,0 +1,8 @@
+{
+  "type": "lore:crafting_special_lore_book",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    }
+  ]
+}

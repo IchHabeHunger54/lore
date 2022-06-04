@@ -17,6 +17,7 @@ public class Lore {
     public Lore() {
         LoreRegistration.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         LoreRegistration.LOOT_MODIFIER_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        LoreRegistration.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         LorePageManager.instance();
         MinecraftForge.EVENT_BUS.addListener(Lore::addReloadListener);
     }

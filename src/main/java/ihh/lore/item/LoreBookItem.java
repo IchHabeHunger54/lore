@@ -56,12 +56,6 @@ public class LoreBookItem extends Item {
         stack.getOrCreateTagElement(Lore.MOD_ID).putIntArray(PAGES, intListToArray(list));
     }
 
-    public static void addPages(ItemStack stack, int... pages) {
-        for (int i : pages) {
-            addPage(stack, i);
-        }
-    }
-
     public static void addPages(ItemStack stack, List<Integer> pages) {
         for (int i : pages) {
             addPage(stack, i);
