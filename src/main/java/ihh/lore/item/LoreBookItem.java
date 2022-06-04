@@ -71,6 +71,12 @@ public class LoreBookItem extends Item {
                 .toList();
     }
 
+    public static boolean hasPage(ItemStack stack, int page) {
+        return getAllPages(stack).stream()
+                .map(LorePageManager.LorePageData::number)
+                .anyMatch(e -> e == page);
+    }
+
     @Override
     public void appendHoverText(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents, @Nonnull TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);

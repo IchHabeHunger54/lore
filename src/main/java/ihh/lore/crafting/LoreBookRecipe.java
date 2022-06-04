@@ -54,7 +54,8 @@ public class LoreBookRecipe extends CustomRecipe {
             }
             return false;
         }
-        return page && list.stream().filter(e -> e == Ingredient.EMPTY).findAny().isEmpty();
+        return page && list.stream()
+                .noneMatch(e -> e == Ingredient.EMPTY);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class LoreBookRecipe extends CustomRecipe {
 
     @Override
     public boolean canCraftInDimensions(int pWidth, int pHeight) {
-        return pWidth * pHeight > ingredients.size() + 1;
+        return pWidth * pHeight >= ingredients.size() + 1;
     }
 
     @Override
