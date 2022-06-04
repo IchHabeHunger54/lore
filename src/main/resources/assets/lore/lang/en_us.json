@@ -1,0 +1,18 @@
+{
+  "itemGroup.lore": "Lore",
+  "item.lore.lore_book": "Tattered Book",
+  "item.lore.lore_book.invalid": "Tattered Book (Invalid)",
+  "item.lore.lore_book.tooltip": "%d / %d pages",
+  "item.lore.lore_page": "Tattered Page",
+  "item.lore.lore_page.invalid": "This page has an invalid format! Please contact the modpack/datapack developer for support.",
+  "item.lore.lore_page.tooltip.book": "Belongs to book: %s",
+  "item.lore.lore_page.tooltip.number": "Page %d / %d",
+  "item.lore.lore_page.tooltip.invalid": "This page has an invalid format! Please contact the mod developer for support.",
+  "item.lore.lore_book.name.othertest": "Test Book 2",
+  "item.lore.lore_book.name.test": "Test Book 1",
+  "item.lore.lore_page.othertest.1.text": "This is a test in another book.",
+  "item.lore.lore_page.othertest.2.text": "This is another test in another book.",
+  "item.lore.lore_page.test.1.text": "This is a test.",
+  "item.lore.lore_page.test.2.text": "This is another test.",
+  "item.lore.lore_page.test.3.text": "This is yet another test."
+}
