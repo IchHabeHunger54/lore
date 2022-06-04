@@ -19,6 +19,7 @@ import java.util.Optional;
 
 public class LorePageManager extends CodecDataManager<LorePageManager.LorePageData> {
     private static final Lazy<LorePageManager> INSTANCE = Lazy.concurrentOf(LorePageManager::new);
+    private List<LorePageData> randomCache;
 
     private LorePageManager() {
         super("lore_pages", LorePageData.CODEC, Lore.LOGGER);
@@ -52,7 +53,11 @@ public class LorePageManager extends CodecDataManager<LorePageManager.LorePageDa
     }
 
     public LorePageData getRandomPage() {
-        return new ArrayList<>(values()).get(0);
+        if (randomCache == null || randomCache.size() != values().size()) {
+            randomCache = new ArrayList<>(values());
+        }
+        Collections.shuffle(randomCache);
+        return randomCache.get(0);
     }
 
     public record LorePageData(String book, int number) implements Comparable<LorePageData> {

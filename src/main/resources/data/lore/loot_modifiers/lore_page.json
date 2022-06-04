@@ -1,4 +1,5 @@
 {
+  "conditions": [],
   "type": "lore:lore_page",
   "chance": 0.5
 }
