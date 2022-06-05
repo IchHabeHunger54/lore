@@ -1,11 +1,17 @@
 package ihh.lore.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import ihh.lore.Lore;
 import ihh.lore.LorePageManager;
+import ihh.lore.SetLecternPagePacket;
+import ihh.lore.TakeLoreBookFromLecternPacket;
 import ihh.lore.item.LoreBookItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.PageButton;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
@@ -24,14 +30,18 @@ public class LoreBookViewScreen extends LoreViewScreen {
     private static final ResourceLocation LOCATION = new ResourceLocation("textures/gui/book.png");
     private final List<FormattedText> text = new ArrayList<>();
     private final boolean playTurnSound;
-    private int currentPage;
+    private final int startPage;
+    private final BlockPos lecternPos;
+    private int currentPage = -1;
     private int cachedPage = -1;
     private Component pageMsg = TextComponent.EMPTY;
     private PageButton forwardButton;
     private PageButton backButton;
 
-    public LoreBookViewScreen(ItemStack stack, boolean pPlayTurnSound) {
-        playTurnSound = pPlayTurnSound;
+    public LoreBookViewScreen(ItemStack stack, boolean playTurnSound, int startPage, BlockPos lecternPos) {
+        this.playTurnSound = playTurnSound;
+        this.startPage = startPage;
+        this.lecternPos = lecternPos;
         for (LorePageManager.LorePageData data : LoreBookItem.getAllPages(stack)) {
             text.add(data == null ? FormattedText.of(new TranslatableComponent("item.lore.lore_page.invalid").getString(), Style.EMPTY.withColor(ChatFormatting.RED)) : FormattedText.of(new TranslatableComponent("item.lore.lore_page." + data.book() + "." + data.number() + ".text").getString()));
         }
@@ -39,11 +49,18 @@ public class LoreBookViewScreen extends LoreViewScreen {
 
     @Override
     protected void init() {
-        super.init();
+        if (lecternPos == null) {
+            super.init();
+        } else {
+            addRenderableWidget(new Button(width / 2 - 100, 196, 98, 20, CommonComponents.GUI_DONE, e -> minecraft.setScreen(null)));
+            addRenderableWidget(new Button(this.width / 2 + 2, 196, 98, 20, new TranslatableComponent("lectern.take_book"), e -> {
+                Lore.NETWORK_HANDLER.sendToServer(new TakeLoreBookFromLecternPacket(lecternPos));
+                minecraft.setScreen(null);
+            }));
+        }
         forwardButton = addRenderableWidget(new PageButton((width - 192) / 2 + 116, 159, true, p -> setPage(currentPage + 1), playTurnSound));
         backButton = addRenderableWidget(new PageButton((width - 192) / 2 + 43, 159, false, p -> setPage(currentPage - 1), playTurnSound));
-        forwardButton.visible = currentPage < text.size() - 1;
-        backButton.visible = currentPage > 0;
+        setPage(startPage);
     }
 
     @Override
@@ -59,6 +76,11 @@ public class LoreBookViewScreen extends LoreViewScreen {
             }
         }
         return super.handleComponentClicked(pStyle);
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return lecternPos == null;
     }
 
     @Override
@@ -93,6 +115,9 @@ public class LoreBookViewScreen extends LoreViewScreen {
         cachedPage = -1;
         forwardButton.visible = currentPage < text.size() - 1;
         backButton.visible = currentPage > 0;
+        if (lecternPos != null) {
+            Lore.NETWORK_HANDLER.sendToServer(new SetLecternPagePacket(lecternPos, currentPage));
+        }
         return true;
     }
 }

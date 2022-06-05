@@ -11,11 +11,9 @@ import net.minecraftforge.common.util.Lazy;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class LorePageManager extends CodecDataManager<LorePageManager.LorePageData> {
     private static final Lazy<LorePageManager> INSTANCE = Lazy.concurrentOf(LorePageManager::new);

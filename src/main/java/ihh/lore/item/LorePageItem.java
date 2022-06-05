@@ -1,8 +1,8 @@
 package ihh.lore.item;
 
 import ihh.lore.Lore;
-import ihh.lore.LoreRegistration;
 import ihh.lore.LorePageManager;
+import ihh.lore.LoreRegistration;
 import ihh.lore.client.ClientHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;

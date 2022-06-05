@@ -1,20 +1,27 @@
 package ihh.lore.item;
 
 import ihh.lore.Lore;
-import ihh.lore.LoreRegistration;
 import ihh.lore.LorePageManager;
+import ihh.lore.LoreRegistration;
 import ihh.lore.client.ClientHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LecternBlock;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -77,6 +84,23 @@ public class LoreBookItem extends Item {
                 .anyMatch(e -> e == page);
     }
 
+    public static boolean placeInLectern(ItemStack stack, Player player, Level level, BlockPos pos) {
+        return getBook(stack) != null && level.getBlockEntity(pos) instanceof LecternBlockEntity && LecternBlock.tryPlaceBook(player, level, pos, level.getBlockState(pos), stack);
+    }
+
+    public static boolean takeFromLectern(Player player, Level level, BlockPos pos, BlockState state) {
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof LecternBlockEntity lectern && state.getValue(LecternBlock.HAS_BOOK)) {
+            ItemStack stack = lectern.getBook();
+            lectern.setBook(ItemStack.EMPTY);
+            LecternBlock.resetBookState(level, pos, state, false);
+            if (!player.getInventory().add(stack)) {
+                player.drop(stack, false);
+            }
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void appendHoverText(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents, @Nonnull TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
@@ -112,12 +136,20 @@ public class LoreBookItem extends Item {
 
     @Override
     @Nonnull
+    public InteractionResult useOn(UseOnContext pContext) {
+        Level level = pContext.getLevel();
+        return placeInLectern(pContext.getItemInHand(), pContext.getPlayer(), level, pContext.getClickedPos()) ? InteractionResult.sidedSuccess(level.isClientSide()) : super.useOn(pContext);
+    }
+
+    @Override
+    @Nonnull
     public InteractionResultHolder<ItemStack> use(@Nonnull Level pLevel, Player pPlayer, @Nonnull InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
         if (pLevel.isClientSide()) {
             if (stack.getOrCreateTagElement(Lore.MOD_ID).getIntArray(PAGES).length == 0) return InteractionResultHolder.fail(stack);
-            ClientHelper.setLoreBookScreen(stack);
+            ClientHelper.setLoreBookScreen(stack, true, 0, null);
         }
+        pPlayer.awardStat(Stats.ITEM_USED.get(this));
         return InteractionResultHolder.sidedSuccess(stack, true);
     }
 
