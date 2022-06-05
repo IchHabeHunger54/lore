@@ -2,6 +2,9 @@ package ihh.lore;
 
 import com.github.minecraftschurlimods.simplenetlib.NetworkHandler;
 import ihh.lore.item.LoreBookItem;
+import ihh.lore.packet.OpenLoreBookGuiInLecternPacket;
+import ihh.lore.packet.SetLecternPagePacket;
+import ihh.lore.packet.TakeLoreBookFromLecternPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;

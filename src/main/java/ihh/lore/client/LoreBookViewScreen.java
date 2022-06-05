@@ -3,8 +3,8 @@ package ihh.lore.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import ihh.lore.Lore;
 import ihh.lore.LorePageManager;
-import ihh.lore.SetLecternPagePacket;
-import ihh.lore.TakeLoreBookFromLecternPacket;
+import ihh.lore.packet.SetLecternPagePacket;
+import ihh.lore.packet.TakeLoreBookFromLecternPacket;
 import ihh.lore.item.LoreBookItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
@@ -20,11 +20,11 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
 
 public class LoreBookViewScreen extends LoreViewScreen {
     private static final ResourceLocation LOCATION = new ResourceLocation("textures/gui/book.png");
@@ -98,7 +98,7 @@ public class LoreBookViewScreen extends LoreViewScreen {
     }
 
     @Override
-    public void render(@Nonnull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         renderBackgroundGuiAndText(pPoseStack, LOCATION, text.get(currentPage), 8);
         if (cachedPage != currentPage) {
             pageMsg = new TranslatableComponent("book.pageIndicator", currentPage + 1, Math.max(text.size(), 1));

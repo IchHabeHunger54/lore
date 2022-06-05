@@ -13,7 +13,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class AddLorePageRecipe extends CustomRecipe {
     public AddLorePageRecipe(ResourceLocation pId) {
@@ -21,7 +20,7 @@ public class AddLorePageRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer pContainer, Level pLevel) {
+    public boolean matches(CraftingContainer pContainer, @NotNull Level pLevel) {
         ItemStack book = ItemStack.EMPTY, page = ItemStack.EMPTY;
         for (int i = 0; i < pContainer.getContainerSize(); i++) {
             ItemStack stack = pContainer.getItem(i);
@@ -46,6 +45,7 @@ public class AddLorePageRecipe extends CustomRecipe {
     }
 
     @Override
+    @NotNull
     public ItemStack assemble(CraftingContainer pContainer) {
         ItemStack book = ItemStack.EMPTY, page = ItemStack.EMPTY;
         for (int i = 0; i < pContainer.getContainerSize(); i++) {
@@ -67,25 +67,25 @@ public class AddLorePageRecipe extends CustomRecipe {
     }
 
     @Override
+    @NotNull
     public RecipeSerializer<?> getSerializer() {
         return LoreRegistration.ADD_LORE_PAGE_RECIPE_SERIALIZER.get();
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AddLorePageRecipe> {
+        @Override
         @NotNull
-        @Override
-        public AddLorePageRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-            return new AddLorePageRecipe(pRecipeId);
-        }
-
-        @Nullable
-        @Override
-        public AddLorePageRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+        public AddLorePageRecipe fromJson(@NotNull ResourceLocation pRecipeId, @NotNull JsonObject pSerializedRecipe) {
             return new AddLorePageRecipe(pRecipeId);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf pBuffer, AddLorePageRecipe pRecipe) {
+        public AddLorePageRecipe fromNetwork(@NotNull ResourceLocation pRecipeId, @NotNull FriendlyByteBuf pBuffer) {
+            return new AddLorePageRecipe(pRecipeId);
+        }
+
+        @Override
+        public void toNetwork(@NotNull FriendlyByteBuf pBuffer, @NotNull AddLorePageRecipe pRecipe) {
         }
     }
 }

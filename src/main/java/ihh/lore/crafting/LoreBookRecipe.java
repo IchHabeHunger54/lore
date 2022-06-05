@@ -18,7 +18,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class LoreBookRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer pContainer, Level pLevel) {
+    public boolean matches(@NotNull CraftingContainer pContainer, @NotNull Level pLevel) {
         boolean page = false;
         List<Ingredient> list = NonNullList.withSize(ingredients.size(), Ingredient.EMPTY);
         loop: for (int i = 0; i < pContainer.getContainerSize(); i++) {
@@ -59,6 +58,7 @@ public class LoreBookRecipe extends CustomRecipe {
     }
 
     @Override
+    @NotNull
     public ItemStack assemble(CraftingContainer pContainer) {
         for (int i = 0; i < pContainer.getContainerSize(); i++) {
             ItemStack stack = pContainer.getItem(i);
@@ -78,14 +78,15 @@ public class LoreBookRecipe extends CustomRecipe {
     }
 
     @Override
+    @NotNull
     public RecipeSerializer<?> getSerializer() {
         return LoreRegistration.LORE_BOOK_RECIPE_SERIALIZER.get();
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<LoreBookRecipe> {
-        @NotNull
         @Override
-        public LoreBookRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
+        @NotNull
+        public LoreBookRecipe fromJson(@NotNull ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
             List<Ingredient> list = new ArrayList<>();
             JsonArray ingredients = pSerializedRecipe.getAsJsonArray("ingredients");
             for (JsonElement element : ingredients) {
@@ -94,9 +95,8 @@ public class LoreBookRecipe extends CustomRecipe {
             return new LoreBookRecipe(pRecipeId, list);
         }
 
-        @Nullable
         @Override
-        public LoreBookRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+        public LoreBookRecipe fromNetwork(@NotNull ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
             List<Ingredient> list = NonNullList.withSize(pBuffer.readVarInt(), Ingredient.EMPTY);
             for (int i = 0; i < list.size(); ++i) {
                 list.set(i, Ingredient.fromNetwork(pBuffer));

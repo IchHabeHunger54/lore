@@ -28,8 +28,8 @@ public class LorePageLootModifier extends LootModifier {
         this.chance = chance;
     }
 
-    @NotNull
     @Override
+    @NotNull
     protected List<ItemStack> doApply(List<ItemStack> list, LootContext context) {
         Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
         if (origin == null) return list;

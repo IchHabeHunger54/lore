@@ -12,13 +12,12 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public interface LoreRegistration {
     CreativeModeTab TAB = new CreativeModeTab(Lore.MOD_ID) {
         @Override
-        @Nonnull
+        @NotNull
         public ItemStack makeIcon() {
             return new ItemStack(LORE_BOOK.get());
         }

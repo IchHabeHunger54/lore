@@ -22,13 +22,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Nonnull;
 
 public class LoreBookItem extends Item {
     public static final String BOOK = "book";
@@ -88,7 +87,7 @@ public class LoreBookItem extends Item {
         return getBook(stack) != null && level.getBlockEntity(pos) instanceof LecternBlockEntity && LecternBlock.tryPlaceBook(player, level, pos, level.getBlockState(pos), stack);
     }
 
-    public static boolean takeFromLectern(Player player, Level level, BlockPos pos, BlockState state) {
+    public static void takeFromLectern(Player player, Level level, BlockPos pos, BlockState state) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof LecternBlockEntity lectern && state.getValue(LecternBlock.HAS_BOOK)) {
             ItemStack stack = lectern.getBook();
             lectern.setBook(ItemStack.EMPTY);
@@ -96,26 +95,24 @@ public class LoreBookItem extends Item {
             if (!player.getInventory().add(stack)) {
                 player.drop(stack, false);
             }
-            return true;
         }
-        return false;
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents, @Nonnull TooltipFlag pIsAdvanced) {
+    public void appendHoverText(@NotNull ItemStack pStack, Level pLevel, @NotNull List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         pTooltipComponents.add(new TranslatableComponent(TOOLTIP, getAllPages(pStack).size(), LorePageManager.instance().getMaxPagesForBook(getBook(pStack))));
     }
 
-    @Nonnull
     @Override
-    public Component getName(@Nonnull ItemStack pStack) {
+    @NotNull
+    public Component getName(@NotNull ItemStack pStack) {
         String book = getBook(pStack);
         return new TranslatableComponent(Objects.equals(book, "") ? INVALID : NAME + book);
     }
 
     @Override
-    public void fillItemCategory(@Nonnull CreativeModeTab pCategory, @Nonnull NonNullList<ItemStack> pItems) {
+    public void fillItemCategory(@NotNull CreativeModeTab pCategory, @NotNull NonNullList<ItemStack> pItems) {
         if (pCategory != LoreRegistration.TAB) return;
         LorePageManager.instance().values().stream()
                 .map(LorePageManager.LorePageData::book)
@@ -135,15 +132,15 @@ public class LoreBookItem extends Item {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public InteractionResult useOn(UseOnContext pContext) {
         Level level = pContext.getLevel();
         return placeInLectern(pContext.getItemInHand(), pContext.getPlayer(), level, pContext.getClickedPos()) ? InteractionResult.sidedSuccess(level.isClientSide()) : super.useOn(pContext);
     }
 
     @Override
-    @Nonnull
-    public InteractionResultHolder<ItemStack> use(@Nonnull Level pLevel, Player pPlayer, @Nonnull InteractionHand pUsedHand) {
+    @NotNull
+    public InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
         if (pLevel.isClientSide()) {
             if (stack.getOrCreateTagElement(Lore.MOD_ID).getIntArray(PAGES).length == 0) return InteractionResultHolder.fail(stack);

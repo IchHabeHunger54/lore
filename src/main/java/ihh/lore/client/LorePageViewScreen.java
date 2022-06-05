@@ -10,8 +10,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class LorePageViewScreen extends LoreViewScreen {
     private static final ResourceLocation LOCATION = new ResourceLocation(Lore.MOD_ID, "textures/gui/lore_page.png");
@@ -23,7 +22,7 @@ public class LorePageViewScreen extends LoreViewScreen {
     }
 
     @Override
-    public void render(@Nonnull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         renderBackgroundGuiAndText(pPoseStack, LOCATION, text, 0);
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }

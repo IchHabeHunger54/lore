@@ -18,11 +18,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Nonnull;
 
 public class LorePageItem extends Item {
     public static final String BOOK = "item.lore.lore_page.tooltip.book";
@@ -48,7 +47,7 @@ public class LorePageItem extends Item {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack pStack, @Nullable Level pLevel, @Nonnull List<Component> pTooltipComponents, @Nonnull TooltipFlag pIsAdvanced) {
+    public void appendHoverText(@NotNull ItemStack pStack, Level pLevel, @NotNull List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         LorePageManager.LorePageData data = getPage(pStack);
         if (data == null || Objects.equals(data.book(), "")) {
@@ -60,7 +59,7 @@ public class LorePageItem extends Item {
     }
 
     @Override
-    public void fillItemCategory(@Nonnull CreativeModeTab pCategory, @Nonnull NonNullList<ItemStack> pItems) {
+    public void fillItemCategory(@NotNull CreativeModeTab pCategory, @NotNull NonNullList<ItemStack> pItems) {
         if (pCategory != LoreRegistration.TAB) return;
         LorePageManager.instance().values().stream()
                 .distinct()
@@ -70,8 +69,8 @@ public class LorePageItem extends Item {
     }
 
     @Override
-    @Nonnull
-    public InteractionResultHolder<ItemStack> use(@Nonnull Level pLevel, Player pPlayer, @Nonnull InteractionHand pUsedHand) {
+    @NotNull
+    public InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
         ItemStack stack = pPlayer.getItemInHand(pUsedHand);
         if (pLevel.isClientSide()) {
             ClientHelper.setLorePageScreen(stack);

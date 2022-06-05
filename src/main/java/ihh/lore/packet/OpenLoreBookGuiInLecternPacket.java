@@ -1,4 +1,4 @@
-package ihh.lore;
+package ihh.lore.packet;
 
 import com.github.minecraftschurlimods.simplenetlib.IPacket;
 import ihh.lore.client.ClientHelper;
