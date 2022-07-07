@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoreBookViewScreen extends LoreViewScreen {
-    private static final ResourceLocation LOCATION = new ResourceLocation("textures/gui/book.png");
+    private static final ResourceLocation LOCATION = new ResourceLocation(Lore.MOD_ID, "textures/gui/lore_book.png");
     private final List<FormattedText> text = new ArrayList<>();
     private final boolean playTurnSound;
     private final int startPage;
