@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
 public class AddLorePageRecipe extends CustomRecipe {
@@ -72,7 +71,7 @@ public class AddLorePageRecipe extends CustomRecipe {
         return LoreRegistration.ADD_LORE_PAGE_RECIPE_SERIALIZER.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AddLorePageRecipe> {
+    public static class Serializer implements RecipeSerializer<AddLorePageRecipe> {
         @Override
         @NotNull
         public AddLorePageRecipe fromJson(@NotNull ResourceLocation pRecipeId, @NotNull JsonObject pSerializedRecipe) {

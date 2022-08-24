@@ -1,10 +1,11 @@
 package ihh.lore;
 
-import com.google.gson.JsonObject;
+import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import ihh.lore.item.LorePageItem;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -12,14 +13,15 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class LorePageLootModifier extends LootModifier {
+    public static final Supplier<Codec<LorePageLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(inst -> codecStart(inst).and(Codec.FLOAT.fieldOf("chance").forGetter(o -> o.chance)).apply(inst, LorePageLootModifier::new)));
     private static final Random RANDOM = new Random();
     private final float chance;
 
@@ -30,7 +32,7 @@ public class LorePageLootModifier extends LootModifier {
 
     @Override
     @NotNull
-    protected List<ItemStack> doApply(List<ItemStack> list, LootContext context) {
+    protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
         Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
         if (origin == null) return list;
         BlockEntity blockEntity = context.getLevel().getBlockEntity(new BlockPos(origin));
@@ -40,15 +42,8 @@ public class LorePageLootModifier extends LootModifier {
         return list;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<LorePageLootModifier> {
-        @Override
-        public LorePageLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] conditions) {
-            return new LorePageLootModifier(conditions, GsonHelper.getAsFloat(object, "chance"));
-        }
-
-        @Override
-        public JsonObject write(LorePageLootModifier instance) {
-            return makeConditions(instance.conditions);
-        }
+    @Override
+    public Codec<? extends IGlobalLootModifier> codec() {
+        return CODEC.get();
     }
 }

@@ -5,9 +5,9 @@ import ihh.lore.Lore;
 import ihh.lore.LorePageManager;
 import ihh.lore.item.LorePageItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ public class LorePageViewScreen extends LoreViewScreen {
 
     public LorePageViewScreen(ItemStack stack) {
         LorePageManager.LorePageData data = LorePageItem.getPage(stack);
-        text = data == null ? FormattedText.of(new TranslatableComponent("item.lore.lore_page.invalid").getString(), Style.EMPTY.withColor(ChatFormatting.RED)) : FormattedText.of(new TranslatableComponent("item.lore.lore_page." + data.book() + "." + data.number() + ".text").getString());
+        text = data == null ? FormattedText.of(Component.translatable("item.lore.lore_page.invalid").getString(), Style.EMPTY.withColor(ChatFormatting.RED)) : FormattedText.of(Component.translatable("item.lore.lore_page." + data.book() + "." + data.number() + ".text").getString());
     }
 
     @Override

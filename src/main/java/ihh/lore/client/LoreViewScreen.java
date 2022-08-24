@@ -2,7 +2,7 @@ package ihh.lore.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.chat.NarratorChatListener;
+import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public abstract class LoreViewScreen extends Screen {
     public LoreViewScreen() {
-        super(NarratorChatListener.NO_TITLE);
+        super(GameNarrator.NO_TITLE);
     }
 
     @Override

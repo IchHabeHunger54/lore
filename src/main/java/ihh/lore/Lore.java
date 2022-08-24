@@ -6,6 +6,7 @@ import ihh.lore.packet.OpenLoreBookGuiInLecternPacket;
 import ihh.lore.packet.SetLecternPagePacket;
 import ihh.lore.packet.TakeLoreBookFromLecternPacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -34,9 +35,9 @@ public class Lore {
         LoreRegistration.LOOT_MODIFIER_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         LoreRegistration.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
         LorePageManager.instance();
-        NETWORK_HANDLER.register(OpenLoreBookGuiInLecternPacket.class, NetworkDirection.PLAY_TO_CLIENT);
-        NETWORK_HANDLER.register(SetLecternPagePacket.class, NetworkDirection.PLAY_TO_SERVER);
-        NETWORK_HANDLER.register(TakeLoreBookFromLecternPacket.class, NetworkDirection.PLAY_TO_SERVER);
+        NETWORK_HANDLER.register(OpenLoreBookGuiInLecternPacket.ID, OpenLoreBookGuiInLecternPacket.class, NetworkDirection.PLAY_TO_CLIENT);
+        NETWORK_HANDLER.register(SetLecternPagePacket.ID, SetLecternPagePacket.class, NetworkDirection.PLAY_TO_SERVER);
+        NETWORK_HANDLER.register(TakeLoreBookFromLecternPacket.ID, TakeLoreBookFromLecternPacket.class, NetworkDirection.PLAY_TO_SERVER);
         MinecraftForge.EVENT_BUS.addListener(Lore::addReloadListener);
         MinecraftForge.EVENT_BUS.addListener(Lore::rightClickBlock);
     }
@@ -47,8 +48,8 @@ public class Lore {
 
     private static void rightClickBlock(PlayerInteractEvent.RightClickBlock e) {
         if (e.getSide() == LogicalSide.CLIENT) return;
-        Player player = e.getPlayer();
-        Level level = e.getWorld();
+        Player player = e.getEntity();
+        Level level = e.getLevel();
         BlockPos pos = e.getHitVec().getBlockPos();
         BlockState state = level.getBlockState(pos);
         if (level.getBlockEntity(pos) instanceof LecternBlockEntity lectern && state.getValue(LecternBlock.HAS_BOOK)) {

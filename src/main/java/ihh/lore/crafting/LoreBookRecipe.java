@@ -16,7 +16,6 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -83,7 +82,7 @@ public class LoreBookRecipe extends CustomRecipe {
         return LoreRegistration.LORE_BOOK_RECIPE_SERIALIZER.get();
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<LoreBookRecipe> {
+    public static class Serializer implements RecipeSerializer<LoreBookRecipe> {
         @Override
         @NotNull
         public LoreBookRecipe fromJson(@NotNull ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {

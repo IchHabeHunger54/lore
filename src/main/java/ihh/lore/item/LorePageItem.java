@@ -9,7 +9,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -51,10 +50,10 @@ public class LorePageItem extends Item {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
         LorePageManager.LorePageData data = getPage(pStack);
         if (data == null || Objects.equals(data.book(), "")) {
-            pTooltipComponents.add(new TranslatableComponent(INVALID, Style.EMPTY.withColor(ChatFormatting.RED)));
+            pTooltipComponents.add(Component.translatable(INVALID, Style.EMPTY.withColor(ChatFormatting.RED)));
         } else {
-            pTooltipComponents.add(new TranslatableComponent(BOOK, new TranslatableComponent(LoreBookItem.NAME + data.book()).getString()));
-            pTooltipComponents.add(new TranslatableComponent(NUMBER, data.number(), LorePageManager.instance().getMaxPagesForBook(data.book())));
+            pTooltipComponents.add(Component.translatable(BOOK, Component.translatable(LoreBookItem.NAME + data.book()).getString()));
+            pTooltipComponents.add(Component.translatable(NUMBER, data.number(), LorePageManager.instance().getMaxPagesForBook(data.book())));
         }
     }
 

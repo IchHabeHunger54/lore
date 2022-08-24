@@ -7,7 +7,6 @@ import ihh.lore.client.ClientHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -101,14 +100,14 @@ public class LoreBookItem extends Item {
     @Override
     public void appendHoverText(@NotNull ItemStack pStack, Level pLevel, @NotNull List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-        pTooltipComponents.add(new TranslatableComponent(TOOLTIP, getAllPages(pStack).size(), LorePageManager.instance().getMaxPagesForBook(getBook(pStack))));
+        pTooltipComponents.add(Component.translatable(TOOLTIP, getAllPages(pStack).size(), LorePageManager.instance().getMaxPagesForBook(getBook(pStack))));
     }
 
     @Override
     @NotNull
     public Component getName(@NotNull ItemStack pStack) {
         String book = getBook(pStack);
-        return new TranslatableComponent(Objects.equals(book, "") ? INVALID : NAME + book);
+        return Component.translatable(Objects.equals(book, "") ? INVALID : NAME + book);
     }
 
     @Override

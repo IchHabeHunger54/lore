@@ -3,9 +3,9 @@ package ihh.lore.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import ihh.lore.Lore;
 import ihh.lore.LorePageManager;
+import ihh.lore.item.LoreBookItem;
 import ihh.lore.packet.SetLecternPagePacket;
 import ihh.lore.packet.TakeLoreBookFromLecternPacket;
-import ihh.lore.item.LoreBookItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.PageButton;
@@ -15,8 +15,6 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +32,7 @@ public class LoreBookViewScreen extends LoreViewScreen {
     private final BlockPos lecternPos;
     private int currentPage = -1;
     private int cachedPage = -1;
-    private Component pageMsg = TextComponent.EMPTY;
+    private Component pageMsg = Component.empty();
     private PageButton forwardButton;
     private PageButton backButton;
 
@@ -43,7 +41,7 @@ public class LoreBookViewScreen extends LoreViewScreen {
         this.startPage = startPage;
         this.lecternPos = lecternPos;
         for (LorePageManager.LorePageData data : LoreBookItem.getAllPages(stack)) {
-            text.add(data == null ? FormattedText.of(new TranslatableComponent("item.lore.lore_page.invalid").getString(), Style.EMPTY.withColor(ChatFormatting.RED)) : FormattedText.of(new TranslatableComponent("item.lore.lore_page." + data.book() + "." + data.number() + ".text").getString()));
+            text.add(data == null ? FormattedText.of(Component.translatable("item.lore.lore_page.invalid").getString(), Style.EMPTY.withColor(ChatFormatting.RED)) : FormattedText.of(Component.translatable("item.lore.lore_page." + data.book() + "." + data.number() + ".text").getString()));
         }
     }
 
@@ -53,7 +51,7 @@ public class LoreBookViewScreen extends LoreViewScreen {
             super.init();
         } else {
             addRenderableWidget(new Button(width / 2 - 100, 196, 98, 20, CommonComponents.GUI_DONE, e -> minecraft.setScreen(null)));
-            addRenderableWidget(new Button(this.width / 2 + 2, 196, 98, 20, new TranslatableComponent("lectern.take_book"), e -> {
+            addRenderableWidget(new Button(this.width / 2 + 2, 196, 98, 20, Component.translatable("lectern.take_book"), e -> {
                 Lore.NETWORK_HANDLER.sendToServer(new TakeLoreBookFromLecternPacket(lecternPos));
                 minecraft.setScreen(null);
             }));
@@ -101,7 +99,7 @@ public class LoreBookViewScreen extends LoreViewScreen {
     public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         renderBackgroundGuiAndText(pPoseStack, LOCATION, text.get(currentPage), 8);
         if (cachedPage != currentPage) {
-            pageMsg = new TranslatableComponent("book.pageIndicator", currentPage + 1, Math.max(text.size(), 1));
+            pageMsg = Component.translatable("book.pageIndicator", currentPage + 1, Math.max(text.size(), 1));
             cachedPage = currentPage;
         }
         font.draw(pPoseStack, pageMsg, (float) ((width - 192) / 2 - font.width(pageMsg) + 192 - 44), 18, 0);

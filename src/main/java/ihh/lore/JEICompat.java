@@ -25,7 +25,7 @@ public class JEICompat implements IModPlugin {
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM, LorePageManager.instance().values().stream()
+        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, LorePageManager.instance().values().stream()
                 .distinct()
                 .sorted()
                 .map(LorePageItem::makePage)
@@ -46,6 +46,6 @@ public class JEICompat implements IModPlugin {
                             .toList());
                     books.add(stack);
                 });
-        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM, books);
+        jeiRuntime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, books);
     }
 }
