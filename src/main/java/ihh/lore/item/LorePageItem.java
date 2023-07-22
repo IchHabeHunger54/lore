@@ -59,7 +59,7 @@ public class LorePageItem extends Item {
 
     @Override
     public void fillItemCategory(@NotNull CreativeModeTab pCategory, @NotNull NonNullList<ItemStack> pItems) {
-        if (pCategory != LoreRegistration.TAB) return;
+        if (pCategory != getItemCategory()) return;
         LorePageManager.instance().values().stream()
                 .distinct()
                 .sorted()
