@@ -17,12 +17,10 @@ import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class LorePageLootModifier extends LootModifier {
     public static final Supplier<Codec<LorePageLootModifier>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(inst -> codecStart(inst).and(Codec.FLOAT.fieldOf("chance").forGetter(o -> o.chance)).apply(inst, LorePageLootModifier::new)));
-    private static final Random RANDOM = new Random();
     private final float chance;
 
     public LorePageLootModifier(LootItemCondition[] conditions, float chance) {
@@ -35,8 +33,8 @@ public class LorePageLootModifier extends LootModifier {
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
         Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
         if (origin == null) return list;
-        BlockEntity blockEntity = context.getLevel().getBlockEntity(new BlockPos(origin));
-        if (blockEntity instanceof BaseContainerBlockEntity && RANDOM.nextFloat() < chance) {
+        BlockEntity blockEntity = context.getLevel().getBlockEntity(new BlockPos((int) origin.x, (int) origin.y, (int) origin.z));
+        if (blockEntity instanceof BaseContainerBlockEntity && context.getRandom().nextFloat() < chance) {
             list.add(LorePageItem.makePage(LorePageManager.instance().getRandomPage()));
         }
         return list;

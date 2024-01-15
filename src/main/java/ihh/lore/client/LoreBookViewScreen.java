@@ -1,12 +1,12 @@
 package ihh.lore.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import ihh.lore.Lore;
 import ihh.lore.LorePageManager;
 import ihh.lore.item.LoreBookItem;
 import ihh.lore.packet.SetLecternPagePacket;
 import ihh.lore.packet.TakeLoreBookFromLecternPacket;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.core.BlockPos;
@@ -50,11 +50,11 @@ public class LoreBookViewScreen extends LoreViewScreen {
         if (lecternPos == null) {
             super.init();
         } else {
-            addRenderableWidget(new Button(width / 2 - 100, 196, 98, 20, CommonComponents.GUI_DONE, e -> minecraft.setScreen(null)));
-            addRenderableWidget(new Button(this.width / 2 + 2, 196, 98, 20, Component.translatable("lectern.take_book"), e -> {
+            addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, e -> minecraft.setScreen(null)).pos(width / 2 - 100, 196).size(98, 20).build());
+            addRenderableWidget(Button.builder(Component.translatable("lectern.take_book"), e -> {
                 Lore.NETWORK_HANDLER.sendToServer(new TakeLoreBookFromLecternPacket(lecternPos));
                 minecraft.setScreen(null);
-            }));
+            }).pos(width / 2 + 2, 196).size(98, 20).build());
         }
         forwardButton = addRenderableWidget(new PageButton((width - 192) / 2 + 116, 159, true, p -> setPage(currentPage + 1), playTurnSound));
         backButton = addRenderableWidget(new PageButton((width - 192) / 2 + 43, 159, false, p -> setPage(currentPage - 1), playTurnSound));
@@ -96,14 +96,14 @@ public class LoreBookViewScreen extends LoreViewScreen {
     }
 
     @Override
-    public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackgroundGuiAndText(pPoseStack, LOCATION, text.get(currentPage), 8);
+    public void render(@NotNull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        renderBackgroundGuiAndText(graphics, LOCATION, text.get(currentPage), 8);
         if (cachedPage != currentPage) {
             pageMsg = Component.translatable("book.pageIndicator", currentPage + 1, Math.max(text.size(), 1));
             cachedPage = currentPage;
         }
-        font.draw(pPoseStack, pageMsg, (float) ((width - 192) / 2 - font.width(pageMsg) + 192 - 44), 18, 0);
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        graphics.drawString(font, pageMsg, (width - 192) / 2 - font.width(pageMsg) + 192 - 44, 18, 0);
+        super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
     private boolean setPage(int pPageNum) {

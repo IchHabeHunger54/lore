@@ -4,10 +4,12 @@ import com.google.gson.JsonObject;
 import ihh.lore.LoreRegistration;
 import ihh.lore.item.LoreBookItem;
 import ihh.lore.item.LorePageItem;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AddLorePageRecipe extends CustomRecipe {
     public AddLorePageRecipe(ResourceLocation pId) {
-        super(pId);
+        super(pId, CraftingBookCategory.MISC);
     }
 
     @Override
@@ -45,7 +47,7 @@ public class AddLorePageRecipe extends CustomRecipe {
 
     @Override
     @NotNull
-    public ItemStack assemble(CraftingContainer pContainer) {
+    public ItemStack assemble(CraftingContainer pContainer, @NotNull RegistryAccess registryAccess) {
         ItemStack book = ItemStack.EMPTY, page = ItemStack.EMPTY;
         for (int i = 0; i < pContainer.getContainerSize(); i++) {
             ItemStack stack = pContainer.getItem(i);

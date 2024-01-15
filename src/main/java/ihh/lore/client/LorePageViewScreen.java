@@ -1,10 +1,10 @@
 package ihh.lore.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import ihh.lore.Lore;
 import ihh.lore.LorePageManager;
 import ihh.lore.item.LorePageItem;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
@@ -22,8 +22,8 @@ public class LorePageViewScreen extends LoreViewScreen {
     }
 
     @Override
-    public void render(@NotNull PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackgroundGuiAndText(pPoseStack, LOCATION, text, 0);
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+    public void render(@NotNull GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        renderBackgroundGuiAndText(graphics, LOCATION, text, 0);
+        super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }
 }

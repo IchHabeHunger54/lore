@@ -20,7 +20,7 @@ public class LorePageManager extends CodecDataManager<LorePageManager.LorePageDa
     private List<LorePageData> randomCache;
 
     private LorePageManager() {
-        super(Lore.MOD_ID, "lore_pages", LorePageData.CODEC);
+        super(Lore.MOD_ID, "lore_pages", LorePageData.CODEC); //TODO
         subscribeAsSyncable(Lore.NETWORK_HANDLER);
     }
 

@@ -33,7 +33,7 @@ public record SetLecternPagePacket(BlockPos pos, int page) implements IPacket {
     @Override
     public void handle(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
-            BlockEntity blockEntity = context.getSender().getLevel().getBlockEntity(pos);
+            BlockEntity blockEntity = context.getSender().level().getBlockEntity(pos);
             if (blockEntity instanceof LecternBlockEntity lectern) {
                 lectern.setPage(page);
             }

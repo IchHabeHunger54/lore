@@ -6,7 +6,6 @@ import ihh.lore.packet.OpenLoreBookGuiInLecternPacket;
 import ihh.lore.packet.SetLecternPagePacket;
 import ihh.lore.packet.TakeLoreBookFromLecternPacket;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,12 +13,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkDirection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,15 +34,26 @@ public class Lore {
     public static final NetworkHandler NETWORK_HANDLER = NetworkHandler.create(MOD_ID, "main", 1);
 
     public Lore() {
-        LoreRegistration.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        LoreRegistration.LOOT_MODIFIER_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        LoreRegistration.RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        LoreRegistration.ITEMS.register(bus);
+        LoreRegistration.CREATIVE_MODE_TABS.register(bus);
+        LoreRegistration.LOOT_MODIFIER_SERIALIZERS.register(bus);
+        LoreRegistration.RECIPE_SERIALIZERS.register(bus);
         LorePageManager.instance();
         NETWORK_HANDLER.register(OpenLoreBookGuiInLecternPacket.ID, OpenLoreBookGuiInLecternPacket.class, NetworkDirection.PLAY_TO_CLIENT);
         NETWORK_HANDLER.register(SetLecternPagePacket.ID, SetLecternPagePacket.class, NetworkDirection.PLAY_TO_SERVER);
         NETWORK_HANDLER.register(TakeLoreBookFromLecternPacket.ID, TakeLoreBookFromLecternPacket.class, NetworkDirection.PLAY_TO_SERVER);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            bus.addListener(Lore::buildCreativeModeTabContents);
+        }
         MinecraftForge.EVENT_BUS.addListener(Lore::addReloadListener);
         MinecraftForge.EVENT_BUS.addListener(Lore::rightClickBlock);
+    }
+
+    private static void buildCreativeModeTabContents(BuildCreativeModeTabContentsEvent e) {
+        if (e.getTabKey() == LoreRegistration.TAB.getKey()) {
+            e.accept(LoreRegistration.LORE_PAGE);
+        }
     }
 
     private static void addReloadListener(AddReloadListenerEvent e) {

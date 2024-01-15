@@ -5,14 +5,12 @@ import ihh.lore.LorePageManager;
 import ihh.lore.LoreRegistration;
 import ihh.lore.client.ClientHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -28,7 +26,7 @@ public class LorePageItem extends Item {
     public static final String INVALID = "item.lore.lore_page.tooltip.invalid";
 
     public LorePageItem() {
-        super(new Properties().stacksTo(1).tab(LoreRegistration.TAB));
+        super(new Properties().stacksTo(1));
     }
 
     public static LorePageManager.LorePageData getPage(ItemStack stack) {
@@ -55,16 +53,6 @@ public class LorePageItem extends Item {
             pTooltipComponents.add(Component.translatable(BOOK, Component.translatable(LoreBookItem.NAME + data.book()).getString()));
             pTooltipComponents.add(Component.translatable(NUMBER, data.number(), LorePageManager.instance().getMaxPagesForBook(data.book())));
         }
-    }
-
-    @Override
-    public void fillItemCategory(@NotNull CreativeModeTab pCategory, @NotNull NonNullList<ItemStack> pItems) {
-        if (pCategory != getItemCategory()) return;
-        LorePageManager.instance().values().stream()
-                .distinct()
-                .sorted()
-                .map(LorePageItem::makePage)
-                .forEach(pItems::add);
     }
 
     @Override

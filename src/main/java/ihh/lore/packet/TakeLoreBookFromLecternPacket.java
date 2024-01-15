@@ -30,6 +30,6 @@ public record TakeLoreBookFromLecternPacket(BlockPos pos) implements IPacket {
 
     @Override
     public void handle(NetworkEvent.Context context) {
-        context.enqueueWork(() -> LoreBookItem.takeFromLectern(context.getSender(), context.getSender().getLevel(), pos, context.getSender().getLevel().getBlockState(pos)));
+        context.enqueueWork(() -> LoreBookItem.takeFromLectern(context.getSender(), context.getSender().level(), pos, context.getSender().level().getBlockState(pos)));
     }
 }

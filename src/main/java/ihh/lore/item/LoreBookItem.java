@@ -5,14 +5,12 @@ import ihh.lore.LorePageManager;
 import ihh.lore.LoreRegistration;
 import ihh.lore.client.ClientHelper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -36,7 +34,7 @@ public class LoreBookItem extends Item {
     public static final String TOOLTIP = "item.lore.lore_book.tooltip";
 
     public LoreBookItem() {
-        super(new Properties().stacksTo(1).tab(LoreRegistration.TAB));
+        super(new Properties().stacksTo(1));
     }
 
     public static void setBook(ItemStack stack, String book) {
@@ -90,7 +88,7 @@ public class LoreBookItem extends Item {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof LecternBlockEntity lectern && state.getValue(LecternBlock.HAS_BOOK)) {
             ItemStack stack = lectern.getBook();
             lectern.setBook(ItemStack.EMPTY);
-            LecternBlock.resetBookState(level, pos, state, false);
+            LecternBlock.resetBookState(player, level, pos, state, false);
             if (!player.getInventory().add(stack)) {
                 player.drop(stack, false);
             }
@@ -108,26 +106,6 @@ public class LoreBookItem extends Item {
     public Component getName(@NotNull ItemStack pStack) {
         String book = getBook(pStack);
         return Component.translatable(Objects.equals(book, "") ? INVALID : NAME + book);
-    }
-
-    @Override
-    public void fillItemCategory(@NotNull CreativeModeTab pCategory, @NotNull NonNullList<ItemStack> pItems) {
-        if (pCategory != getItemCategory()) return;
-        LorePageManager.instance().values().stream()
-                .map(LorePageManager.LorePageData::book)
-                .distinct()
-                .sorted()
-                .forEach(book -> {
-                    pItems.add(makeBook(book));
-                    ItemStack stack = makeBook(book);
-                    addPages(stack, LorePageManager.instance().values().stream()
-                            .filter(e -> e.book().equals(book))
-                            .map(LorePageManager.LorePageData::number)
-                            .distinct()
-                            .sorted()
-                            .toList());
-                    pItems.add(stack);
-                });
     }
 
     @Override
